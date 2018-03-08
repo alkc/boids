@@ -1,2 +1,3 @@
 # boids
-An updated take at an old project of mine
+
+Wherein [yours truly](https://github.com/alkc) tries his hand at a remake of an old [project.](https://github.com/alkc/flockingboids)
