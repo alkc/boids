@@ -54,5 +54,4 @@ while simulation:
 
 
 pygame.quit()
-output_thing.close()
 sys.exit()
