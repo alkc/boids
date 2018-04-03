@@ -9,11 +9,11 @@ from rules import *
 from graphics import *
 
 habitat_size = (500, 500)
-nbr_boids = 25
+nbr_boids = 5
 min_distance_to_other_boids = 10
 cohesion_weight = 0.01
 align_weight = 0.125
-separation_weight = 1.00
+separation_weight =  1.00
 max_speed = 5
 
 # Intialize pygame display:
@@ -37,9 +37,11 @@ while simulation:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 simulation = False
+    
+    old_velocities = np.copy(velocities)
 
     velocities += cohesion_rule(positions, cohesion_weight)
-    velocities += align_rule(velocities, align_weight)
+    velocities += align_rule(old_velocities, align_weight)
     velocities += separation_rule(positions,
                                   min_distance_to_other_boids, separation_weight)
     velocities = limit_speed(velocities, max_speed)
