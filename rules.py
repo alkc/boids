@@ -15,13 +15,20 @@ def cohesion_rule(positions, weight):
 
 
 def get_displacement_vector(boid_position, other_boids_positions, min_distance_to_other_boids):
-    displacement_vectors = other_boids_positions - boid_position
+    displacement_vectors = boid_position - other_boids_positions
     output = np.array([0.0, 0.0])
-    for vector in displacement_vectors:
-        distance_to_other_boid = np.linalg.norm(vector)
+    for displacement_vector in displacement_vectors:
+        distance_to_other_boid = np.linalg.norm(displacement_vector)
         if distance_to_other_boid < min_distance_to_other_boids:
-
-            output = output - (vector/distance_to_other_boid)
+            difference = displacement_vector.copy()
+            print(1, displacement_vector)
+            # difference = normalize(difference)
+            print(2, difference)
+            difference = difference/distance_to_other_boid
+            print(3, difference)
+            # difference = displacement_vector/distance_to_other_boid
+            output = output + (difference)
+            print(output)
 
     return output
 
