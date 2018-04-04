@@ -13,14 +13,14 @@ nbr_boids = 5
 min_distance_to_other_boids = 10
 cohesion_weight = 0.01
 align_weight = 0.125
-separation_weight =  1.00
+separation_weight = 1.00
 max_speed = 5
 
 # Intialize pygame display:
 
 pygame.init()
 screen = pygame.display.set_mode(habitat_size)
-bg_color = (0, 0, 0)
+bg_color = Color(0, 0, 0)
 clock = pygame.time.Clock()
 
 # Spawn random boids
@@ -37,7 +37,7 @@ while simulation:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 simulation = False
-    
+
     old_velocities = np.copy(velocities)
 
     velocities += cohesion_rule(positions, cohesion_weight)

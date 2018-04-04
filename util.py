@@ -1,5 +1,6 @@
 import random
 import numpy as np
+from collections import namedtuple
 
 
 def get_random_position(habitat_size):
@@ -16,3 +17,6 @@ def remove_curr_boid(list_of_arrays, index):
     copy_list = list(list_of_arrays)
     del copy_list[index]
     return copy_list
+
+
+Color = namedtuple('Color', ['red', 'green', 'blue'])
