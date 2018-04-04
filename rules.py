@@ -14,13 +14,14 @@ def cohesion_rule(positions, weight):
     return output * np.array(weight)
 
 
-def get_distances(boid, other_boids, min_distance_to_other_boids):
-    displacement_vectors = list(other_boids - boid)
+def get_displacement_vector(boid_position, other_boids_positions, min_distance_to_other_boids):
+    displacement_vectors = other_boids_positions - boid_position
     output = np.array([0.0, 0.0])
     for vector in displacement_vectors:
         distance_to_other_boid = np.linalg.norm(vector)
         if distance_to_other_boid < min_distance_to_other_boids:
-            output = output - vector
+
+            output = output - (vector/distance_to_other_boid)
 
     return output
 
@@ -32,9 +33,10 @@ def separation_rule(positions, min_distance_to_other_boids, weight):
     for i in range(nbr_boids):
         curr_boid = positions[i]
         other_boids = remove_curr_boid(positions, i)
+
         output.append(
-            get_distances(curr_boid, other_boids,
-                          min_distance_to_other_boids))
+            get_displacement_vector(curr_boid, other_boids,
+                                    min_distance_to_other_boids))
 
     return output * np.array([weight])
 
