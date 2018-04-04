@@ -19,4 +19,11 @@ def remove_curr_boid(list_of_arrays, index):
     return copy_list
 
 
+def normalize(vector):
+    norm = np.linalg.norm(vector)
+    if norm == 0:
+        return vector
+    return vector / norm
+
+
 Color = namedtuple('Color', ['red', 'green', 'blue'])
