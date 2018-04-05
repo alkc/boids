@@ -16,19 +16,17 @@ def cohesion_rule(positions, weight):
 
 def get_displacement_vector(boid_position, other_boids_positions, min_distance_to_other_boids):
     displacement_vectors = boid_position - other_boids_positions
+    # print(1, boid_position, other_boids_positions)
+    # print(2, boid_position - other_boids_positions)
     output = np.array([0.0, 0.0])
     for displacement_vector in displacement_vectors:
         distance_to_other_boid = np.linalg.norm(displacement_vector)
         if distance_to_other_boid < min_distance_to_other_boids:
             difference = displacement_vector.copy()
-            print(1, displacement_vector)
-            # difference = normalize(difference)
-            print(2, difference)
+            difference = normalize(difference)
             difference = difference/distance_to_other_boid
-            print(3, difference)
-            # difference = displacement_vector/distance_to_other_boid
             output = output + (difference)
-            print(output)
+            # print(boid_position, output, difference)
 
     return output
 
@@ -85,17 +83,17 @@ def keep_in_confines(positions, habitat_size):
         y = boid[1]
 
         if x > max_x:
-            print("foo")
+            # print("foo")
             x = x - max_x
         if x < 0:
-            print("foo")
+            # print("foo")
             x = max_x + x
 
         if y > max_y:
-            print("foo")
+            # print("foo")
             y = y - max_y
         if y < 0:
-            print("foo")
+            # print("foo")
             y = max_y + y
 
         output.append(np.array([x, y]))
