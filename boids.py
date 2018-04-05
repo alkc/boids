@@ -10,7 +10,7 @@ from graphics import *
 
 habitat_size = (500, 500)
 nbr_boids = 5
-min_distance_to_other_boids = 10
+min_distance_to_other_boids = 50
 cohesion_weight = 0.01
 align_weight = 0.125
 separation_weight = 1.00
@@ -38,12 +38,12 @@ while simulation:
             if event.key == pygame.K_ESCAPE:
                 simulation = False
 
-    old_velocities = np.copy(velocities)
+    old_velocities = velocities.copy()
 
-    velocities += cohesion_rule(positions, cohesion_weight)
-    velocities += align_rule(old_velocities, align_weight)
     velocities += separation_rule(positions,
                                   min_distance_to_other_boids, separation_weight)
+    velocities += align_rule(old_velocities, align_weight)
+    velocities += cohesion_rule(positions, cohesion_weight)
     velocities = limit_speed(velocities, max_speed)
 
     positions = positions + velocities
