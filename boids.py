@@ -11,6 +11,7 @@ from graphics import *
 habitat_size = (500, 500)
 nbr_boids = 5
 min_distance_to_other_boids = 50
+boid_perception_radius = 100
 cohesion_weight = 0.01
 align_weight = 0.125
 separation_weight = 1.00
@@ -40,10 +41,19 @@ while simulation:
 
     old_velocities = velocities.copy()
 
-    velocities += separation_rule(positions,
-                                  min_distance_to_other_boids) * separation_weight
-    velocities += align_rule(old_velocities) * align_weight
-    velocities += cohesion_rule(positions) * cohesion_weight
+    separation_vector = separation_rule(positions,
+                                        min_distance_to_other_boids)
+    separation_vector = steer(
+        separation_vector, old_velocities) * separation_weight
+
+    alignment_vector = align_rule(old_velocities)
+    alignment_vector = steer(alignment_vector, old_velocities) * align_weight
+
+    cohesion_vector = cohesion_rule(positions)
+    cohesion_vector = steer(cohesion_vector, old_velocities) * cohesion_weight
+
+    velocities = old_velocities + separation_vector + \
+        alignment_vector + cohesion_vector
     velocities = limit_speed(velocities, max_speed)
 
     positions = positions + velocities

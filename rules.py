@@ -14,6 +14,10 @@ def cohesion_rule(positions):
     return output * np.array([1])
 
 
+def steer(velocities, old_velocities):
+    return velocities - old_velocities
+
+
 def get_displacement_vector(boid_position, other_boids_positions, min_distance_to_other_boids):
     displacement_vectors = boid_position - other_boids_positions
     # print(1, boid_position, other_boids_positions)
