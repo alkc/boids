@@ -41,9 +41,9 @@ while simulation:
     old_velocities = velocities.copy()
 
     velocities += separation_rule(positions,
-                                  min_distance_to_other_boids, separation_weight)
-    velocities += align_rule(old_velocities, align_weight)
-    velocities += cohesion_rule(positions, cohesion_weight)
+                                  min_distance_to_other_boids) * separation_weight
+    velocities += align_rule(old_velocities) * align_weight
+    velocities += cohesion_rule(positions) * cohesion_weight
     velocities = limit_speed(velocities, max_speed)
 
     positions = positions + velocities

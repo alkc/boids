@@ -3,7 +3,7 @@ import numpy as np
 from util import *
 
 
-def cohesion_rule(positions, weight):
+def cohesion_rule(positions):
     nbr_boids = len(positions)
     output = list()
     for i in range(nbr_boids):
@@ -11,7 +11,7 @@ def cohesion_rule(positions, weight):
         other_boids = remove_curr_boid(positions, i)
         output_vector = sum(other_boids) / (nbr_boids - 1)
         output.append(output_vector - curr_boid)
-    return output * np.array(weight)
+    return output * np.array([1])
 
 
 def get_displacement_vector(boid_position, other_boids_positions, min_distance_to_other_boids):
@@ -31,7 +31,8 @@ def get_displacement_vector(boid_position, other_boids_positions, min_distance_t
     return output
 
 
-def separation_rule(positions, min_distance_to_other_boids, weight):
+def separation_rule(positions, min_distance_to_other_boids):
+    weight = 1
     nbr_boids = len(positions)
     output = list()
 
@@ -42,11 +43,11 @@ def separation_rule(positions, min_distance_to_other_boids, weight):
         output.append(
             get_displacement_vector(curr_boid, other_boids,
                                     min_distance_to_other_boids))
-
     return output * np.array([weight])
 
 
-def align_rule(velocities, weight):
+def align_rule(velocities):
+    weight = 1
     nbr_boids = len(velocities)
     output = list()
 
@@ -70,6 +71,14 @@ def limit_speed(velocities, max_speed):
         output.append(new_velocity)
 
     return np.array(output)
+
+
+# TODO: Iterate over boids, create subsets based on min distance to other boids
+def move_them_boids(positions, velocities):
+    nbr_boids = len(positions)
+
+    for i in range(nbr_boids):
+        pass
 
 
 def keep_in_confines(positions, habitat_size):
