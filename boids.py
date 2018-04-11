@@ -15,7 +15,8 @@ boid_perception_radius = 100
 cohesion_weight = 0.01
 align_weight = 0.125
 separation_weight = 1.00
-max_speed = 5
+boid_max_speed = 10
+boid_min_speed = 5
 
 # Intialize pygame display:
 
@@ -54,7 +55,7 @@ while simulation:
 
     velocities = old_velocities + separation_vector + \
         alignment_vector + cohesion_vector
-    velocities = limit_speed(velocities, max_speed)
+    velocities = set_speed(velocities, boid_min_speed, boid_max_speed)
 
     positions = positions + velocities
     positions = keep_in_confines(positions, habitat_size)

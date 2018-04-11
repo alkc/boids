@@ -63,7 +63,7 @@ def align_rule(velocities):
     return output * np.array(weight)
 
 
-def limit_speed(velocities, max_speed):
+def set_speed(velocities, min_speed, max_speed):
 
     output = list()
 
@@ -72,6 +72,9 @@ def limit_speed(velocities, max_speed):
         new_velocity = velocity
         if speed > max_speed:
             new_velocity = (velocity / speed) * max_speed
+        elif speed < min_speed:
+            new_velocity = (velocity / speed) * min_speed
+
         output.append(new_velocity)
 
     return np.array(output)
