@@ -56,7 +56,9 @@ def align_rule(velocities):
     for i in range(nbr_boids):
         curr_boid = velocities[i]
         other_boids = sum(remove_curr_boid(velocities, i)) / (nbr_boids - 1)
-        output.append(other_boids - curr_boid)
+        alignment_vector = other_boids - curr_boid
+        alignment_vector = normalize(alignment_vector)
+        output.append(alignment_vector)
 
     return output * np.array(weight)
 
