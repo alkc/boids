@@ -4,6 +4,7 @@ from util import *
 
 
 def cohesion_rule(positions):
+
     nbr_boids = len(positions)
     cohesion_vectors = list()
 
@@ -12,6 +13,7 @@ def cohesion_rule(positions):
         other_boid_positions = remove_curr_boid(positions, i)
         flock_center = sum(other_boid_positions) / (nbr_boids - 1)
         cohesion_vector = flock_center - curr_boid_position
+        # cohesion_vector = flock_center
         cohesion_vector = normalize(cohesion_vector)
 
         cohesion_vectors.append(cohesion_vector)
@@ -30,7 +32,7 @@ def get_displacement_vector(boid_position, other_boids_positions, min_distance_t
         distance_to_other_boid = np.linalg.norm(displacement_vector)
         if distance_to_other_boid < min_distance_to_other_boids:
             difference = displacement_vector.copy()
-            difference = normalize(difference)
+            difference = normalize(difference)/distance_to_other_boid
             # difference = difference/distance_to_other_boid
             output = output - (difference)
             # print(boid_position, output, difference)
