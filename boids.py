@@ -9,12 +9,12 @@ from rules import *
 from graphics import *
 
 habitat_size = (500, 500)
-nbr_boids = 5
-min_distance_to_other_boids = 50
+nbr_boids = 50
+min_distance_to_other_boids = 8
 boid_perception_radius = 100
-cohesion_weight = 1.0
-align_weight = 1.0
-separation_weight = 1.00
+cohesion_weight = 0.1
+align_weight = 0.125
+separation_weight = 1.0
 boid_max_speed = 10
 boid_min_speed = 1
 
@@ -29,9 +29,7 @@ clock = pygame.time.Clock()
 positions = [get_random_position(habitat_size) for x in range(nbr_boids)]
 
 velocities = [get_random_velocity() for x in range(nbr_boids)]
-velocities = set_speed(velocities, boid_min_speed, boid_max_speed)
-
-print(velocities)
+velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
 
 simulation = True
 
