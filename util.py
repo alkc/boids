@@ -10,7 +10,7 @@ def get_random_position(habitat_size):
 
 
 def get_random_velocity():
-    return np.random.rand(2)
+    return np.random.uniform(-2, 2, 2)
 
 
 def remove_curr_boid(list_of_arrays, index):
