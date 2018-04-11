@@ -19,17 +19,15 @@ def steer(velocities, old_velocities):
 
 
 def get_displacement_vector(boid_position, other_boids_positions, min_distance_to_other_boids):
-    displacement_vectors = boid_position - other_boids_positions
-    # print(1, boid_position, other_boids_positions)
-    # print(2, boid_position - other_boids_positions)
+    displacement_vectors = other_boids_positions - boid_position
     output = np.array([0.0, 0.0])
     for displacement_vector in displacement_vectors:
         distance_to_other_boid = np.linalg.norm(displacement_vector)
         if distance_to_other_boid < min_distance_to_other_boids:
             difference = displacement_vector.copy()
             difference = normalize(difference)
-            difference = difference/distance_to_other_boid
-            output = output + (difference)
+            # difference = difference/distance_to_other_boid
+            output = output - (difference)
             # print(boid_position, output, difference)
 
     return output
