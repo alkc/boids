@@ -5,13 +5,18 @@ from util import *
 
 def cohesion_rule(positions):
     nbr_boids = len(positions)
-    output = list()
+    cohesion_vectors = list()
+
     for i in range(nbr_boids):
-        curr_boid = positions[i]
-        other_boids = remove_curr_boid(positions, i)
-        output_vector = sum(other_boids) / (nbr_boids - 1)
-        output.append(output_vector - curr_boid)
-    return output * np.array([1])
+        curr_boid_position = positions[i]
+        other_boid_positions = remove_curr_boid(positions, i)
+        flock_center = sum(other_boid_positions) / (nbr_boids - 1)
+        cohesion_vector = flock_center - curr_boid_position
+        cohesion_vector = normalize(cohesion_vector)
+
+        cohesion_vectors.append(cohesion_vector)
+
+    return cohesion_vectors * np.array([1])
 
 
 def steer(velocities, old_velocities):
@@ -51,16 +56,17 @@ def separation_rule(positions, min_distance_to_other_boids):
 def align_rule(velocities):
     weight = 1
     nbr_boids = len(velocities)
-    output = list()
+    alignment_vectors = list()
 
     for i in range(nbr_boids):
-        curr_boid = velocities[i]
-        other_boids = sum(remove_curr_boid(velocities, i)) / (nbr_boids - 1)
-        alignment_vector = other_boids - curr_boid
+        curr_boid_velocity = velocities[i]
+        other_boid_velocities = sum(
+            remove_curr_boid(velocities, i)) / (nbr_boids - 1)
+        alignment_vector = other_boid_velocities - curr_boid_velocity
         alignment_vector = normalize(alignment_vector)
-        output.append(alignment_vector)
+        alignment_vectors.append(alignment_vector)
 
-    return output * np.array(weight)
+    return alignment_vectors * np.array(weight)
 
 
 def set_speed(velocities, min_speed, max_speed):
