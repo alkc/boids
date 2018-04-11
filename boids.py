@@ -27,7 +27,12 @@ clock = pygame.time.Clock()
 
 # Spawn random boids
 positions = [get_random_position(habitat_size) for x in range(nbr_boids)]
+
 velocities = [get_random_velocity() for x in range(nbr_boids)]
+print(velocities)
+velocities = set_speed(velocities, boid_max_speed, boid_max_speed + 1)
+
+print(velocities)
 
 simulation = True
 
