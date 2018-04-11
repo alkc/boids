@@ -12,11 +12,11 @@ habitat_size = (500, 500)
 nbr_boids = 5
 min_distance_to_other_boids = 50
 boid_perception_radius = 100
-cohesion_weight = 0.01
-align_weight = 0.125
+cohesion_weight = 1.0
+align_weight = 1.0
 separation_weight = 1.00
 boid_max_speed = 10
-boid_min_speed = 5
+boid_min_speed = 1
 
 # Intialize pygame display:
 
@@ -29,11 +29,16 @@ clock = pygame.time.Clock()
 positions = [get_random_position(habitat_size) for x in range(nbr_boids)]
 
 velocities = [get_random_velocity() for x in range(nbr_boids)]
-velocities = set_speed(velocities, boid_max_speed, boid_max_speed + 1)
+velocities = set_speed(velocities, boid_min_speed, boid_max_speed)
 
 print(velocities)
 
 simulation = True
+
+
+def intialize_empty_2d_vecs(nbr):
+    return [np.array([0.0, 0.0]) for _ in range(nbr)]
+
 
 while simulation:
 
@@ -44,17 +49,21 @@ while simulation:
             if event.key == pygame.K_ESCAPE:
                 simulation = False
 
+    separation_vector = intialize_empty_2d_vecs(nbr_boids)
+    alignment_vector = intialize_empty_2d_vecs(nbr_boids)
+    cohesion_vector = intialize_empty_2d_vecs(nbr_boids)
+
     old_velocities = velocities.copy()
     separation_vector = separation_rule(positions,
-                                        min_distance_to_other_boids)
-    separation_vector = steer(
-        separation_vector, old_velocities) * separation_weight
+                                        min_distance_to_other_boids) * separation_weight
+    # separation_vector = steer(
+    #     separation_vector, old_velocities)
 
-    alignment_vector = align_rule(old_velocities)
-    alignment_vector = steer(alignment_vector, old_velocities) * align_weight
+    alignment_vector = align_rule(old_velocities) * align_weight
+    # alignment_vector = steer(alignment_vector, old_velocities)
 
-    cohesion_vector = cohesion_rule(positions)
-    cohesion_vector = steer(cohesion_vector, old_velocities) * cohesion_weight
+    cohesion_vector = cohesion_rule(positions) * cohesion_weight
+    # cohesion_vector = steer(cohesion_vector, old_velocities)
 
     velocities = old_velocities + separation_vector + \
         alignment_vector + cohesion_vector
