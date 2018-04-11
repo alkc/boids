@@ -10,7 +10,7 @@ from graphics import *
 
 habitat_size = (500, 500)
 nbr_boids = 50
-min_distance_to_other_boids = 8
+min_distance_to_other_boids = 10
 boid_perception_radius = 100
 cohesion_weight = 0.1
 align_weight = 0.125
