@@ -22,7 +22,8 @@ boid_min_speed = 1
 
 pygame.init()
 screen = pygame.display.set_mode(habitat_size)
-bg_color = Color(0, 0, 0)
+bg_color = Color(130, 130, 200)
+boid_color = Color(255, 200, 200)
 clock = pygame.time.Clock()
 
 # Spawn random boids
@@ -71,7 +72,7 @@ while simulation:
     positions = keep_in_confines(positions, habitat_size)
 
     screen.fill(bg_color)
-    draw_boids(positions, screen)
+    draw_boids(positions, screen, boid_color)
     pygame.display.update()
     clock.tick(30)
 
