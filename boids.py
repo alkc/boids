@@ -35,7 +35,7 @@ velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
 simulation = True
 
 
-def intialize_empty_2d_vecs(nbr):
+def intialize_empty_vectors(nbr):
     return [np.array([0.0, 0.0]) for _ in range(nbr)]
 
 
@@ -48,21 +48,20 @@ while simulation:
             if event.key == pygame.K_ESCAPE:
                 simulation = False
 
-    separation_vector = intialize_empty_2d_vecs(nbr_boids)
-    alignment_vector = intialize_empty_2d_vecs(nbr_boids)
-    cohesion_vector = intialize_empty_2d_vecs(nbr_boids)
+    separation_vector = intialize_empty_vectors(nbr_boids)
+    alignment_vector = intialize_empty_vectors(nbr_boids)
+    cohesion_vector = intialize_empty_vectors(nbr_boids)
 
     old_velocities = velocities.copy()
     separation_vector = separation_rule(positions,
-                                        min_distance_to_other_boids) * separation_weight
-    # separation_vector = steer(
-    #     separation_vector, old_velocities)
+                                        min_distance_to_other_boids)
+    separation_vector *= separation_weight
 
-    alignment_vector = align_rule(old_velocities) * align_weight
-    # alignment_vector = steer(alignment_vector, old_velocities)
+    alignment_vector = align_rule(old_velocities)
+    alignment_vector *= align_weight
 
-    cohesion_vector = cohesion_rule(positions) * cohesion_weight
-    # cohesion_vector = steer(cohesion_vector, old_velocities)
+    cohesion_vector = cohesion_rule(positions)
+    cohesion_vector *= cohesion_weight
 
     velocities = old_velocities + separation_vector + \
         alignment_vector + cohesion_vector

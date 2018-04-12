@@ -26,4 +26,8 @@ def normalize(vector):
     return vector / norm
 
 
+def intialize_empty_vectors(nbr):
+    return [np.array([0.0, 0.0]) for _ in range(nbr)]
+
+
 Color = namedtuple('Color', ['red', 'green', 'blue'])
