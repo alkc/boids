@@ -69,7 +69,7 @@ while simulation:
     screen.fill(bg_color)
     draw_boids(positions, screen, boid_color)
     pygame.display.update()
-    clock.tick(30)
+    clock.tick(60)
 
 
 pygame.quit()
