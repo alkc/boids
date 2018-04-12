@@ -35,10 +35,6 @@ velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
 simulation = True
 
 
-def intialize_empty_vectors(nbr):
-    return [np.array([0.0, 0.0]) for _ in range(nbr)]
-
-
 while simulation:
 
     for event in pygame.event.get():
