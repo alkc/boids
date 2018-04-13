@@ -15,7 +15,7 @@ nbr_boids = 100
 # Flocking rules weights:
 cohesion_weight = 0.1
 align_weight = 0.125
-separation_weight = 1.0
+separation_weight = 0.0
 
 # Boid params:
 boid_max_speed = 8
@@ -44,7 +44,16 @@ velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
 simulation = True
 
 
+def remove_collided_boids(array_2d, kill_list):
+    return np.delete(array_2d, kill_list, axis=0)
+
+
 while simulation:
+
+    if len(positions) < 1:
+        print("All boids are dead")
+        simulation = False
+        continue
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -58,8 +67,6 @@ while simulation:
     alignment_vector = intialize_empty_vectors(nbr_boids)
     cohesion_vector = intialize_empty_vectors(nbr_boids)
 
-    old_velocities = velocities.copy()
-
     # Precalculate distances and neighboring boids based on perception radius
     displacement_vectors = get_displacement_vectors(positions)
     distances = get_distances(displacement_vectors)
@@ -68,7 +75,17 @@ while simulation:
     # Figure out which boids have collided:
     collisions = get_collisions(
         distances, neighbor_lists, boid_collision_radius)
-    print(collisions)
+
+    if len(collisions) > 0:
+        collisions = list(collisions)
+        positions = remove_collided_boids(positions, collisions)
+        velocities = remove_collided_boids(velocities, collisions)
+        # TODO: Fix this :
+        boid_colors = [boid_colors[i]
+                       for i in range(len(boid_colors)) if i not in collisions]
+        continue
+
+    old_velocities = velocities.copy()
 
     # Apply rules
     separation_vector = separation_rule(positions, neighbor_lists,
