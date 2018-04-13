@@ -31,3 +31,40 @@ def intialize_empty_vectors(nbr):
 
 
 Color = namedtuple('Color', ['red', 'green', 'blue'])
+
+
+def get_random_color():
+    R, G, B = [random.randint(0, 255) for _ in range(3)]
+    return Color(R, G, B)
+
+
+def get_displacement_vectors(positions):
+
+    displacement_vectors = list()
+
+    for position in positions:
+        displacement_vectors.append(positions - position)
+
+    return displacement_vectors
+
+
+def get_distances(displacement_vector_lists):
+
+    distances = list()
+
+    for d in displacement_vector_lists:
+        distances.append(np.linalg.norm(d, axis=1))
+
+    return distances
+
+
+def get_neighbors(distance_vectors, neighbor_radius):
+
+    neighbor_indices = list()
+
+    for i, distance_vector in enumerate(distance_vectors):
+        neighbors = [j for j in range(len(distance_vector))
+                     if distance_vector[j] < neighbor_radius and i != j]
+        neighbor_indices.append(neighbors)
+
+    return neighbor_indices
