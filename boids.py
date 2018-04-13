@@ -23,7 +23,7 @@ boid_min_speed = 1
 pygame.init()
 screen = pygame.display.set_mode(habitat_size)
 bg_color = Color(130, 130, 200)
-boid_color = Color(255, 200, 200)
+boid_colors = [get_random_color() for _ in range(nbr_boids)]
 clock = pygame.time.Clock()
 
 # Spawn random boids
@@ -34,7 +34,6 @@ velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
 
 simulation = True
 
-
 while simulation:
 
     for event in pygame.event.get():
@@ -43,14 +42,15 @@ while simulation:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 simulation = False
+                continue
 
     separation_vector = intialize_empty_vectors(nbr_boids)
     alignment_vector = intialize_empty_vectors(nbr_boids)
     cohesion_vector = intialize_empty_vectors(nbr_boids)
 
     old_velocities = velocities.copy()
-    separation_vector = separation_rule(positions,
-                                        min_distance_to_other_boids)
+    separation_vector = separation_rule(
+        positions, min_distance_to_other_boids)
     separation_vector *= separation_weight
 
     alignment_vector = align_rule(old_velocities)
@@ -67,7 +67,7 @@ while simulation:
     positions = keep_in_confines(positions, habitat_size)
 
     screen.fill(bg_color)
-    draw_boids(positions, screen, boid_color)
+    draw_boids(positions, screen, boid_colors)
     pygame.display.update()
     clock.tick(60)
 
