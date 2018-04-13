@@ -44,10 +44,6 @@ velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
 simulation = True
 
 
-def remove_collided_boids(array_2d, kill_list):
-    return np.delete(array_2d, kill_list, axis=0)
-
-
 while simulation:
 
     if len(positions) < 1:
