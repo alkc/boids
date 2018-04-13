@@ -3,6 +3,8 @@ import numpy as np
 from util import *
 
 
+# Boids show fly towards center of flock:
+# TODO: Make neighor_indices parameter optional
 def cohesion_rule(positions, neighbor_indices):
 
     nbr_boids = len(positions)
@@ -29,6 +31,8 @@ def cohesion_rule(positions, neighbor_indices):
     return cohesion_vectors * np.array([1])
 
 
+# Boids should keep a minimum distance from other boids
+# TODO: Make neighor_indices parameter optional
 def separation_rule(positions, neighbor_indices, displacement_vectors, distances, min_distance_to_other_boids):
 
     weight = 1
@@ -60,9 +64,13 @@ def separation_rule(positions, neighbor_indices, displacement_vectors, distances
     return output * np.array([weight])
 
 
+# Boids should match velocity of nearby boids:
+# TODO: Make neighor_indices parameter optional
 def align_rule(velocities, neighbor_indices):
     weight = 1
     nbr_boids = len(velocities)
+
+    # TODO: Figure out how to append arrays to arrays to avoid lists
     alignment_vectors = list()
 
     for i in range(nbr_boids):
@@ -82,23 +90,7 @@ def align_rule(velocities, neighbor_indices):
     return alignment_vectors * np.array(weight)
 
 
-def set_speed(velocities, min_speed, max_speed):
-
-    output = list()
-
-    for velocity in velocities:
-        speed = np.linalg.norm(velocity)
-        new_velocity = velocity
-        if speed > max_speed:
-            new_velocity = (velocity / speed) * max_speed
-        elif speed < min_speed:
-            new_velocity = (velocity / speed) * min_speed
-
-        output.append(new_velocity)
-
-    return np.array(output)
-
-
+# Boids should be confied to screen
 def keep_in_confines(positions, habitat_size):
 
     output = list()

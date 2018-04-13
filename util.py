@@ -3,6 +3,23 @@ import numpy as np
 from collections import namedtuple
 
 
+def set_speed(velocities, min_speed, max_speed):
+
+    output = list()
+
+    for velocity in velocities:
+        speed = np.linalg.norm(velocity)
+        new_velocity = velocity
+        if speed > max_speed:
+            new_velocity = (velocity / speed) * max_speed
+        elif speed < min_speed:
+            new_velocity = (velocity / speed) * min_speed
+
+        output.append(new_velocity)
+
+    return np.array(output)
+
+
 def get_random_position(habitat_size):
     x = random.randrange(1, habitat_size[0] - 1)
     y = random.randrange(1, habitat_size[1] - 1)

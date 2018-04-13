@@ -42,7 +42,6 @@ velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
 
 simulation = True
 
-
 while simulation:
 
     for event in pygame.event.get():
@@ -59,31 +58,37 @@ while simulation:
 
     old_velocities = velocities.copy()
 
+    # Precalculate distances and neighboring boids based on perception radius
     displacement_vectors = get_displacement_vectors(positions)
     distances = get_distances(displacement_vectors)
     neighbor_lists = get_neighbors(distances, boid_perception_radius)
 
+    # Apply rules
     separation_vector = separation_rule(positions, neighbor_lists,
                                         displacement_vectors, distances,
                                         min_distance_to_other_boids)
 
-    separation_vector *= separation_weight
-
     alignment_vector = align_rule(old_velocities, neighbor_lists)
-    alignment_vector *= align_weight
 
     cohesion_vector = cohesion_rule(positions, neighbor_lists)
+
+    # Apply weights
+    separation_vector *= separation_weight
+    alignment_vector *= align_weight
     cohesion_vector *= cohesion_weight
 
+    # Accelerate accordingly:
     velocities = old_velocities.copy()
     velocities += separation_vector
     velocities += alignment_vector
     velocities += cohesion_vector
     velocities = set_speed(velocities, boid_min_speed, boid_max_speed)
 
+    # Update positions:
     positions = positions + velocities
     positions = keep_in_confines(positions, habitat_size)
 
+    # Redraw screen:
     screen.fill(bg_color)
     draw_boids(positions, screen, boid_colors)
     pygame.display.update()
