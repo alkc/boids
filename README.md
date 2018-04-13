@@ -2,9 +2,11 @@
 
 Wherein [yours truly](https://github.com/alkc) tries his hand at a remake of an old [project.](https://github.com/alkc/flockingboids)
 
+Feel free to leaf through the [changelog](changelog.md) for list of changes between versions.
+
 ## Installation:
 
-Wanna run this? Or help out? Good.
+Want to install this? Follow the instructions below:
 
 ### Linux
 
