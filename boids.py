@@ -9,14 +9,15 @@ from rules import *
 from graphics import *
 
 habitat_size = (500, 500)
-nbr_boids = 50
-min_distance_to_other_boids = 10
-boid_perception_radius = 100
+nbr_boids = 100
+min_distance_to_other_boids = 5
+boid_perception_radius = 50
 cohesion_weight = 0.1
 align_weight = 0.125
 separation_weight = 1.0
-boid_max_speed = 10
+boid_max_speed = 8
 boid_min_speed = 1
+graphics_fps = 30
 
 # Intialize pygame display:
 
@@ -34,6 +35,7 @@ velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
 
 simulation = True
 
+
 while simulation:
 
     for event in pygame.event.get():
@@ -49,18 +51,27 @@ while simulation:
     cohesion_vector = intialize_empty_vectors(nbr_boids)
 
     old_velocities = velocities.copy()
-    separation_vector = separation_rule(
-        positions, min_distance_to_other_boids)
+
+    displacement_vectors = get_displacement_vectors(positions)
+    distances = get_distances(displacement_vectors)
+    neighbor_lists = get_neighbors(distances, boid_perception_radius)
+
+    separation_vector = separation_rule(positions, neighbor_lists,
+                                        displacement_vectors, distances,
+                                        min_distance_to_other_boids)
+
     separation_vector *= separation_weight
 
-    alignment_vector = align_rule(old_velocities)
+    alignment_vector = align_rule(old_velocities, neighbor_lists)
     alignment_vector *= align_weight
 
-    cohesion_vector = cohesion_rule(positions)
+    cohesion_vector = cohesion_rule(positions, neighbor_lists)
     cohesion_vector *= cohesion_weight
 
-    velocities = old_velocities + separation_vector + \
-        alignment_vector + cohesion_vector
+    velocities = old_velocities.copy()
+    velocities += separation_vector
+    velocities += alignment_vector
+    velocities += cohesion_vector
     velocities = set_speed(velocities, boid_min_speed, boid_max_speed)
 
     positions = positions + velocities
@@ -69,7 +80,7 @@ while simulation:
     screen.fill(bg_color)
     draw_boids(positions, screen, boid_colors)
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(graphics_fps)
 
 
 pygame.quit()
