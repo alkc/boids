@@ -15,7 +15,7 @@ nbr_boids = 100
 # Flocking rules weights:
 cohesion_weight = 0.1
 align_weight = 0.125
-separation_weight = 0.0
+separation_weight = 1.0
 
 # Boid params:
 boid_max_speed = 8
