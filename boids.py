@@ -22,6 +22,7 @@ boid_max_speed = 8
 boid_min_speed = 1
 min_distance_to_other_boids = 10
 boid_perception_radius = 50
+boid_collision_radius = 3
 
 # Graphics settings:
 graphics_fps = 30
@@ -41,6 +42,7 @@ velocities = [get_random_velocity() for x in range(nbr_boids)]
 velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
 
 simulation = True
+
 
 while simulation:
 
@@ -62,6 +64,11 @@ while simulation:
     displacement_vectors = get_displacement_vectors(positions)
     distances = get_distances(displacement_vectors)
     neighbor_lists = get_neighbors(distances, boid_perception_radius)
+
+    # Figure out which boids have collided:
+    collisions = get_collisions(
+        distances, neighbor_lists, boid_collision_radius)
+    print(collisions)
 
     # Apply rules
     separation_vector = separation_rule(positions, neighbor_lists,

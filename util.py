@@ -3,6 +3,22 @@ import numpy as np
 from collections import namedtuple
 
 
+def get_collisions(distances, neighbor_lists, collision_radius):
+
+    boids_that_have_collided = list()
+
+    for i, distance_vector in enumerate(distances):
+        if i in boids_that_have_collided:
+            continue
+
+        current_distances = distance_vector[neighbor_lists[i]]
+        collided_boids = [i for x in current_distances if x < collision_radius]
+
+        boids_that_have_collided = boids_that_have_collided + collided_boids
+
+    return set(boids_that_have_collided)
+
+
 def set_speed(velocities, min_speed, max_speed):
 
     output = list()
