@@ -3,19 +3,16 @@ import numpy as np
 from util import *
 
 
-# def extract_neighbors(2d_vector, neighbor_indices, i):
-
-
 def cohesion_rule(positions, neighbor_indices):
 
     nbr_boids = len(positions)
     cohesion_vectors = list()
 
+    # TODO: Investigate if needed:
     positions = positions * np.array(1)
 
     for i in range(nbr_boids):
         curr_boid_position = positions[i]
-        # print("cohesion", i, neighbor_indices[i])
         other_boid_positions = positions[[neighbor_indices[i]]]
         other_boid_nbr = len(other_boid_positions)
 
@@ -23,10 +20,8 @@ def cohesion_rule(positions, neighbor_indices):
             cohesion_vectors.append(np.zeros(2))
             continue
 
-        # print("other boids", other_boid_positions)
         flock_center = sum(other_boid_positions) / (other_boid_nbr)
         cohesion_vector = flock_center - curr_boid_position
-        # cohesion_vector = flock_center
         cohesion_vector = normalize(cohesion_vector)
 
         cohesion_vectors.append(cohesion_vector)
@@ -34,22 +29,8 @@ def cohesion_rule(positions, neighbor_indices):
     return cohesion_vectors * np.array([1])
 
 
-# def get_displacement_vector(boid_position, other_boids_positions, min_distance_to_other_boids):
-#     displacement_vectors = other_boids_positions - boid_position
-#     output = np.zeros(2)
-#     for displacement_vector in displacement_vectors:
-#         distance_to_other_boid = np.linalg.norm(displacement_vector)
-#         if distance_to_other_boid < min_distance_to_other_boids:
-#             difference = displacement_vector.copy()
-#             difference = normalize(difference)/distance_to_other_boid
-#             # difference = difference/distance_to_other_boid
-#             output = output - (difference)
-#             # print(boid_position, output, difference)
-#     return output
-
-
 def separation_rule(positions, neighbor_indices, displacement_vectors, distances, min_distance_to_other_boids):
-    # print(np.shape(positions))
+
     weight = 1
     nbr_boids = len(positions)
     output = list()
@@ -64,25 +45,14 @@ def separation_rule(positions, neighbor_indices, displacement_vectors, distances
 
         nbr_other_boids = len(other_boids)
 
+        # If no nearby boids then append empty vector.
         if nbr_other_boids < 1:
-            # print(i, "no nearby boids")
             output.append(displacement_vector)
             continue
 
         d = displacement_vectors[i][other_boids]
-        # print(d)
-        # print(other_boids)
-        # print(displacement_vectors[i])
-
-        # print(type(positions))
-        # print(np.shape(positions))
-        # print(len(d))
-        # print(distances[i])
-        # print(other_boids)
-        # print(normalize(d))
-        # print(distances[i][other_boids])
-        # print(len(d), len(other_boids), len(distances[i][other_boids]))
-        d = d/distances[i][other_boids][:, None]
+        d = normalize(d)
+        # d = d/distances[i][other_boids][:, None]
         displacement_vector = sum(displacement_vector - d)
 
         output.append(displacement_vector)

@@ -8,28 +8,35 @@ from util import *
 from rules import *
 from graphics import *
 
+# Simulation settings:
 habitat_size = (500, 500)
 nbr_boids = 100
-min_distance_to_other_boids = 5
-boid_perception_radius = 50
+
+# Flocking rules weights:
 cohesion_weight = 0.1
 align_weight = 0.125
 separation_weight = 1.0
+
+# Boid params:
 boid_max_speed = 8
 boid_min_speed = 1
+min_distance_to_other_boids = 10
+boid_perception_radius = 50
+
+# Graphics settings:
 graphics_fps = 30
+graphics_window_size = habitat_size
 
 # Intialize pygame display:
 
 pygame.init()
-screen = pygame.display.set_mode(habitat_size)
+screen = pygame.display.set_mode(graphics_window_size)
 bg_color = Color(130, 130, 200)
 boid_colors = [get_random_color() for _ in range(nbr_boids)]
 clock = pygame.time.Clock()
 
-# Spawn random boids
+# Spawn random boids and get them moving
 positions = [get_random_position(habitat_size) for x in range(nbr_boids)]
-
 velocities = [get_random_velocity() for x in range(nbr_boids)]
 velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
 
@@ -84,4 +91,3 @@ while simulation:
 
 
 pygame.quit()
-sys.exit()
