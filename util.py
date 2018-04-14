@@ -3,8 +3,8 @@ import numpy as np
 from collections import namedtuple
 
 
-def remove_collided_boids(array_2d, kill_list):
-    return np.delete(array_2d, kill_list, axis=0)
+def remove_collided_boids(array_2d, kill_list, axis):
+    return np.delete(array_2d, kill_list, axis=axis)
 
 
 def get_collisions(distances, neighbor_lists, collision_radius):
