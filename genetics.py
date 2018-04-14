@@ -16,7 +16,25 @@ def is_phenotype(namedtuple):
 
 
 def get_crossover_gametes(gametes):
-    return gametes
+
+    recombination_frequency = 0.70
+
+    if random.random() > 0.70:
+        return gametes
+
+    chromosome_length = len(gametes[0])
+    crossover_position = random.randint(0, chromosome_length)
+
+    a, b = gametes
+
+    print(a)
+
+    c = Chromatid._make(a[0:crossover_position] + b[crossover_position:])
+    d = Chromatid._make(b[0:crossover_position] + a[crossover_position:])
+
+    crossover_gametes = (c, d)
+
+    return crossover_gametes
 
 
 def get_mutated_gametes(gametes):
