@@ -1,7 +1,7 @@
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 from util import Color
 import random
-
+import numpy as np
 Chromatid = namedtuple("Chromatid", ["coh", "sep", "ali", "R", "G", "B"])
 Phenotype = namedtuple("Phenotype", ["behavior", "color"])
 Egg = namedtuple("Egg", ["genome", "phenotype"])
@@ -9,6 +9,10 @@ Egg = namedtuple("Egg", ["genome", "phenotype"])
 
 def is_chromatid(namedtuple):
     return type(namedtuple).__name__ == "Chromatid"
+
+
+def is_phenotype(namedtuple):
+    return type(namedtuple).__name__ == "Phenotype"
 
 
 def get_crossover_gametes(gametes):
@@ -21,15 +25,12 @@ def get_mutated_gametes(gametes):
 
 def get_phenotype(boid_genome):
     chromatid_a, chromatid_b = boid_genome
-
     behavior = get_boid_weights(chromatid_a, chromatid_b)
     color = get_boid_color(chromatid_a, chromatid_b)
-
     return Phenotype(behavior, color)
 
 
 def get_baby_boid(mate_1, mate_2):
-
     gametes = [random.choice(mate_1), random.choice(mate_2)]
     gametes = get_mutated_gametes(gametes)
     gametes = get_crossover_gametes(gametes)
@@ -41,8 +42,9 @@ def get_baby_boid(mate_1, mate_2):
 
 def get_next_generation(individual_genomes, nbr_boids_in_next_gen):
 
-    individuals = list(range(len(individual_genomes)))
-    next_generation = list()
+    # TODO: Fix>
+    individuals = individual_genomes
+    next_generation_eggs = list()
 
     for i in range(nbr_boids_in_next_gen):
 
@@ -53,13 +55,9 @@ def get_next_generation(individual_genomes, nbr_boids_in_next_gen):
             mate_2 = random.choice(individuals)
 
         new_boid = get_baby_boid(mate_1, mate_2)
-        next_generation.append(new_boid)
+        next_generation_eggs.append(new_boid)
 
-    flock = dict()
-    flock['colors'] = [x.phenotype.color for x in next_generation]
-    flock['weights'] = [x.phenotype.behavior for x in next_generation]
-
-    return flock
+    return hatch_flock(next_generation_eggs)
 
 
 def generate_random_chromatid(random_weights, random_colors, default_colors=(0, 0, 0)):
@@ -125,3 +123,39 @@ def get_boid_color(chromatid_a, chromatid_b):
     R, G, B = [average_color(colors_1[i], colors_2[i]) for i in range(3)]
 
     return Color(R, G, B)
+
+
+def hatch_flock(eggs):
+
+    colors = list()
+    genomes = list()
+    weights_dict = defaultdict(list)
+
+    for egg in eggs:
+        colors.append(egg.phenotype.color)
+        genomes.append(egg.genome)
+        for weight in egg.phenotype.behavior.keys():
+            # TODO: it aint an array
+            weight_array = egg.phenotype.behavior[weight]
+            weights_dict[weight].append(weight_array)
+
+    for weight_list in weights_dict.keys():
+        weights_dict[weight_list] = np.array(weights_dict[weight_list])
+    # print(weights_dict)
+    # print(genomes)
+    # print(colors)
+    return colors, genomes, weights_dict
+
+
+def get_random_flock(nbr_boids):
+
+    eggs = list()
+
+    for i in range(nbr_boids):
+        genome = (generate_random_chromatid(True, True),
+                  generate_random_chromatid(True, True))
+        phenotype = get_phenotype(genome)
+
+        eggs.append(Egg(genome, phenotype))
+
+    return hatch_flock(eggs)
