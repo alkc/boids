@@ -20,7 +20,24 @@ def get_crossover_gametes(gametes):
 
 
 def get_mutated_gametes(gametes):
-    return gametes
+
+    # TODO: Break out into parameter
+    mutation_rate = 0.05
+
+    def mutation(gene):
+        if random.random() > mutation_rate:
+            return gene
+        print("Mutation occured in some gene!")
+        point_mutation = random.gauss(0, 1)
+        return gene + point_mutation
+
+    new_gametes = list()
+
+    for gamete in gametes:
+        g = [mutation(gene) for gene in gamete]
+        new_gametes.append(Chromatid._make(g))
+
+    return new_gametes
 
 
 def get_phenotype(boid_genome):
