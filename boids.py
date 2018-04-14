@@ -10,9 +10,9 @@ from rules import *
 from graphics import *
 
 # Simulation settings:
-habitat_size = (500, 500)
-nbr_boids = 100
-min_nbr_boids = 50
+habitat_size = (1200, 800)
+nbr_boids = 150
+min_nbr_boids = 100
 
 # Flocking rules weights:
 cohesion_weight = 0.1
@@ -34,7 +34,7 @@ graphics_window_size = habitat_size
 
 pygame.init()
 screen = pygame.display.set_mode(graphics_window_size)
-bg_color = Color(130, 130, 200)
+bg_color = Color(200, 200, 250)
 boid_colors = [get_random_color() for _ in range(nbr_boids)]
 clock = pygame.time.Clock()
 
