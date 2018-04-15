@@ -3,6 +3,15 @@ import numpy as np
 from collections import namedtuple
 
 
+def get_weight_from_flock(flock, weight):
+
+    return np.array([b[weight] for b in flock['weights']])
+
+
+def get_colors_from_flock(flock):
+    return [b["color"] for b in flock]
+
+
 def remove_collided_boids(array_2d, kill_list, axis):
     return np.delete(array_2d, kill_list, axis=axis)
 

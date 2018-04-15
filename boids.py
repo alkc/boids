@@ -38,7 +38,6 @@ bg_color = Color(200, 200, 250)
 boid_colors = [get_random_color() for _ in range(nbr_boids)]
 clock = pygame.time.Clock()
 
-# Spawn random boids and get them moving
 positions = [get_random_position(habitat_size) for x in range(nbr_boids)]
 velocities = [get_random_velocity() for x in range(nbr_boids)]
 velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
@@ -48,13 +47,10 @@ simulation = True
 boid_colors, boid_genomes, weights = get_random_flock(nbr_boids)
 
 
-def get_weight_from_flock(flock, weight):
+def log_boids_to_csv(colors, genomes, weights, output_file):
 
-    return np.array([b[weight] for b in flock['weights']])
-
-
-def get_colors_from_flock(flock):
-    return [b["color"] for b in flock]
+    output = ""
+    print(output, file=output_file)
 
 
 cohesion_weight = weights['coh']
@@ -65,11 +61,6 @@ mutable_lists = [boid_colors, boid_genomes,
                  cohesion_weight, align_weight, separation_weight]
 
 curr_nbr_boids = nbr_boids
-
-# print(separation_weight)
-# print(np.shape(separation_weight))
-
-# exit()
 
 
 def filter_list_by_boid_killist(input_list, kill_list):
@@ -83,24 +74,21 @@ while simulation:
     if curr_nbr_boids < min_nbr_boids:
 
         # TODO: Rewrite flock ffs
-        # print(type(genomes))
         boid_colors, boid_genomes, weights = get_next_generation(
             boid_genomes, nbr_boids)
-        # print(type(flock))
         cohesion_weight = weights['coh']
         separation_weight = weights['sep']
         align_weight = weights['ali']
-        # print(np.shape(separation_weight))
         positions = [get_random_position(habitat_size)
                      for x in range(nbr_boids)]
         velocities = [get_random_velocity() for x in range(nbr_boids)]
         velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
         curr_nbr_boids = nbr_boids
         generation_nbr += 1
-        print("Advancing to generation:", generation_nbr)
+        print("[INFO] Advancing to generation:", generation_nbr)
 
     if len(positions) < 1:
-        print("All boids are dead")
+        print("[INFO] All boids are dead :(")
         simulation = False
         continue
 
