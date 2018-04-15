@@ -76,6 +76,8 @@ def filter_list_by_boid_killist(input_list, kill_list):
     return [input_list[i] for i in range(len(input_list)) if i not in kill_list]
 
 
+generation_nbr = 1
+
 while simulation:
 
     if curr_nbr_boids < min_nbr_boids:
@@ -94,6 +96,8 @@ while simulation:
         velocities = [get_random_velocity() for x in range(nbr_boids)]
         velocities = set_speed(velocities, boid_min_speed, boid_min_speed + 1)
         curr_nbr_boids = nbr_boids
+        generation_nbr += 1
+        print("Advancing to generation:", generation_nbr)
 
     if len(positions) < 1:
         print("All boids are dead")
