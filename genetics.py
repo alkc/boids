@@ -27,8 +27,6 @@ def get_crossover_gametes(gametes):
 
     a, b = gametes
 
-    print(a)
-
     c = Chromatid._make(a[0:crossover_position] + b[crossover_position:])
     d = Chromatid._make(b[0:crossover_position] + a[crossover_position:])
 
@@ -45,7 +43,7 @@ def get_mutated_gametes(gametes):
     def mutation(gene):
         if random.random() > mutation_rate:
             return gene
-        print("Mutation occured in some gene!")
+        # print("Mutation occured in some gene!")
         point_mutation = random.gauss(0, 1)
         return gene + point_mutation
 
@@ -95,7 +93,7 @@ def get_next_generation(individual_genomes, nbr_boids_in_next_gen):
     return hatch_flock(next_generation_eggs)
 
 
-def generate_random_chromatid(random_weights, random_colors, default_colors=(0, 0, 0)):
+def generate_random_chromatid(random_weights, random_colors, default_colors=(99, 255, 32)):
 
     coh, sep, ali = (0.0, 0.0, 0.0)
     R, G, B = default_colors
@@ -188,7 +186,7 @@ def get_random_flock(nbr_boids):
 
     for i in range(nbr_boids):
         genome = (generate_random_chromatid(True, True),
-                  generate_random_chromatid(True, True))
+                  generate_random_chromatid(True, False))
         phenotype = get_phenotype(genome)
 
         eggs.append(Egg(genome, phenotype))
